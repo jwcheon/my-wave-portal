@@ -1,25 +1,50 @@
 const main = async () => {
-    const [owner, randomPerson] = await hre.ethers.getSigners();
     const waveContractFactory = await hre.ethers.getContractFactory("WavePortal");
-    const waveContract = await waveContractFactory.deploy();
+    const waveContract = await waveContractFactory.deploy({
+        value: hre.ethers.utils.parseEther("0.1"),
+    });
     await waveContract.deployed();
-
     console.log("Contract deployed to:", waveContract.address);
-    console.log("Contract deployed by:", owner.address);
 
-    let waveCount;
-    waveCount = await waveContract.getTotalWaves();
+    /*
+    * Get Contract balance
+    */
+    let contractBalance = await hre.ethers.provider.getBalance(
+        waveContract.address
+    );
+    console.log(
+        "Contract Balance:",
+        hre.ethers.utils.formatEther(contractBalance)
+    )
 
-    let waveTxn = await waveContract.wave();
+    let waveTxn = await waveContract.wave("A message here!");
     await waveTxn.wait();
 
-    waveCount = await waveContract.getTotalWaves();
+    /*
+    * Get Contract balance to see what happened!
+    */
+    contractBalance = await hre.ethers.provider.getBalance(
+        waveContract.address
+    );
+    console.log(
+        "Contract Balance:",
+        hre.ethers.utils.formatEther(contractBalance)
+    )
 
-    // Use Random dude to call contract
-    waveTxn = await waveContract.connect(randomPerson).wave();
-    await waveTxn.wait();
+    // let waveCount;
+    // waveCount = await waveContract.getTotalWaves();
+    // console.log(waveCount);
+    // console.log(waveCount.toNumber());
 
-    waveCount = await waveContract.getTotalWaves();
+    // let waveTxn = await waveContract.wave("A message here!");
+    // await waveTxn.wait();
+
+    // const [_, randomPerson] = await hre.ethers.getSigners();
+    // waveTxn = await waveContract.connect(randomPerson).wave("Random person's here too!");
+    // await waveTxn.wait();
+
+    let allWaves = await waveContract.getAllWaves();
+    console.log(allWaves);
   };
   
 const runMain = async () => {
