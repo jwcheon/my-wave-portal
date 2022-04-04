@@ -17,8 +17,11 @@ const main = async () => {
         hre.ethers.utils.formatEther(contractBalance)
     )
 
-    let waveTxn = await waveContract.wave("A message here!");
+    const waveTxn = await waveContract.wave("Message #1 going in!");
     await waveTxn.wait();
+
+    // const waveTxn2 = await waveContract.wave("Message #2 going in!");
+    // await waveTxn2.wait();
 
     /*
     * Get Contract balance to see what happened!
@@ -29,22 +32,13 @@ const main = async () => {
     console.log(
         "Contract Balance:",
         hre.ethers.utils.formatEther(contractBalance)
-    )
-
-    // let waveCount;
-    // waveCount = await waveContract.getTotalWaves();
-    // console.log(waveCount);
-    // console.log(waveCount.toNumber());
-
-    // let waveTxn = await waveContract.wave("A message here!");
-    // await waveTxn.wait();
-
-    // const [_, randomPerson] = await hre.ethers.getSigners();
-    // waveTxn = await waveContract.connect(randomPerson).wave("Random person's here too!");
-    // await waveTxn.wait();
+    );
 
     let allWaves = await waveContract.getAllWaves();
     console.log(allWaves);
+
+    let totalWaves = await waveContract.getTotalWaves();
+    console.log(totalWaves);
   };
   
 const runMain = async () => {
